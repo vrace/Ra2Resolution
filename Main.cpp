@@ -47,16 +47,7 @@ void __fastcall TMainForm::ButtonOKClick(TObject *Sender)
 {
     int index = ListBoxResolutions->ItemIndex;
     const Resolution &res = m_resolutionService->ResolutionAtIndex(index);
-    if (!m_iniService->UpdateResolution(res)) {
-        AnsiString msg = Format(
-            "Update RA2.ini failed.\n"
-            "You can open RA2.ini later and edit the following settings manually.\n\n"
-            "[Video]\n"
-            "ScreenWidth=%d\n"
-            "ScreenHeight=%d\n",
-            ARRAYOFCONST((res.width, res.height)));
-        MessageDlg(msg, mtWarning, TMsgDlgButtons() << mbOK, 0);
-    }
+    m_iniService->UpdateResolution(res);
     Close();
 }
 

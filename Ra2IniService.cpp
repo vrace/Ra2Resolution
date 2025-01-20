@@ -1,31 +1,25 @@
+#include <vcl.h>
 #pragma hdrstop
 
-#include <fstream>
-#include <string>
+#include <memory>
 
 #include "Ra2IniService.h"
 
 #pragma package(smart_init)
 
-bool Ra2IniService::UpdateResolution(const Resolution &res)
+void Ra2IniService::UpdateResolution(const Resolution &res)
 {
-    std::vector<std::string> rows = LoadIniRows();
-    return false;
+    std::auto_ptr<TIniFile> iniFile(LoadRa2IniFile());
+    iniFile->WriteString("Video", "ScreenWidth", IntToStr(res.width));
+    iniFile->WriteString("Video", "ScreenHeight", IntToStr(res.height));
 }
 
-std::vector<std::string> Ra2IniService::LoadIniRows()
+TIniFile* Ra2IniService::LoadRa2IniFile()
 {
-    std::vector<std::string> rows;
-    std::ifstream fs("RA2.ini");
-
-    if (fs.is_open()) {
-        std::string row;
-        while (std::getline(fs, row)) {
-            rows.push_back(row);
-        }
-    }
-
-    return rows;
+    AnsiString filename = ExtractFilePath(Application->ExeName) + "RA2.ini";
+    return new TIniFile(filename);
 }
+
+
 
 
